@@ -1,0 +1,14 @@
+Name:                falling2d
+Version:             0.0
+Description:         2d physics engine
+License:             LGPL
+-- License-file:        LICENSE
+Author:              Sébastien Crozet
+Maintainer:          developer@crozet.re
+Build-Type:          Simple
+Cabal-Version:       >=1.2
+
+Library
+  Exposed-modules:   Physics.Falling2d.World
+  Build-Depends:     base >= 3, vect >= 0.4.7
+  ghc-options:       -Wall
