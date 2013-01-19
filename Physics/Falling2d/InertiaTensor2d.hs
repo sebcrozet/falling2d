@@ -20,3 +20,9 @@ instance InertiaTensor InertiaTensor2d InverseInertiaTensor2d Vec1 Proj3 where
 instance InverseInertiaTensor InverseInertiaTensor2d Vec1 Proj3 where
   applyToVector (InverseInertiaTensor2d i) v = v &* i
   toWorldSpaceTensor tensor _ _              = tensor
+
+instance Show InertiaTensor2d where
+  show (InertiaTensor2d i) = show i
+
+instance Show InverseInertiaTensor2d where
+  show (InverseInertiaTensor2d i) = show i
