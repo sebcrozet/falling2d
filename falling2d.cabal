@@ -14,10 +14,10 @@ Library
                    Physics.Falling2d.FakeNarrowPhase2d
                    Physics.Falling2d.RigidBody2d
                    Physics.Falling2d.Shape2d
+                   Physics.Falling2d.Rectangle
                    Physics.Falling2d.Shape2dNarrowPhase
                    Physics.Falling2d.Collision2d
                    Physics.Falling2d.Transform2d
                    Physics.Falling2d.Vec1
   Build-Depends:   base, vect, falling
-  ghc-options:     -Wall -O2
-  -- -auto-all -caf-all
+  ghc-options:     -Wall -prof -auto-all -caf-all
