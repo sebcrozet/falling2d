@@ -13,9 +13,10 @@ import Physics.Falling.Shape.ImplicitShape
 import Physics.Falling2d.InertiaTensor2d
 
 data Rectangle = Rectangle Double Double
+                 deriving(Show)
 
 instance ImplicitShape Rectangle Vec2 where
-  supportPoint (Vec2 dx dy) (Rectangle rx ry) = Vec2 (signum dx * rx) (signum dy * ry)
+  supportPoint (Rectangle rx ry) (Vec2 dx dy) = Vec2 (signum dx * rx) (signum dy * ry)
 
 rectangleVolume :: Rectangle -> Double
 rectangleVolume (Rectangle rx ry) = 4.0 * rx * ry

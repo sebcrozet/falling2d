@@ -15,11 +15,13 @@ import Physics.Falling2d.Rectangle
 import Physics.Falling2d.Vec1
 import Physics.Falling2d.InertiaTensor2d
 
-data DynamicShape2d = Ball2d        Ball
+data DynamicShape2d = Ball2d        (Ball Vec2)
                       | Rectangle2d Rectangle
-data StaticShape2d  = StaticBall2d        Ball
+                      deriving(Show)
+data StaticShape2d  = StaticBall2d        (Ball Vec2)
                       | StaticRectangle2d Rectangle
                       | Plane2d           (Plane Vec2)
+                      deriving(Show)
 
 instance VolumetricShape DynamicShape2d InertiaTensor2d InverseInertiaTensor2d Vec1 Proj3 where
   volume (Ball2d b)                            = ballVolume b 2

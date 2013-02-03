@@ -19,5 +19,7 @@ Library
                    Physics.Falling2d.Collision2d
                    Physics.Falling2d.Transform2d
                    Physics.Falling2d.Vec1
-  Build-Depends:   base, vect, falling
-  ghc-options:     -Wall -prof -auto-all -caf-all
+                   Physics.Falling2d.UnitSphere2d
+  Build-Depends:   base, vect, falling, normaldistribution, random
+  ghc-options:     -Wall -O2
+  -- -prof -auto-all -caf-all
