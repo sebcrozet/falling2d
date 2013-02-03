@@ -19,6 +19,10 @@ instance DeltaTransform Transform2d Vec2 where
                        where
                        t  = fromProjective p
                        dt = trim t :: Mat2
+  deltaTransformTranspose p v = dt *. v
+                                where
+                                t  = fromProjective p
+                                dt = trim t :: Mat2
 
 instance Translation Transform2d Vec2 where
   translation p = trim t :: Vec2

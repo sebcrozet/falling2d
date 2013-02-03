@@ -79,11 +79,11 @@ collideStaticDynamicShapes ((StaticRectangle2d r), t1, it1) ((Ball2d b), t2, it2
 collideStaticDynamicShapes ((StaticRectangle2d r1), t1, it1) ((Rectangle2d r2), t2, it2) =
                             collideImplicitShapeImplicitShape (r1, t1, it1) (r2, t2, it2) _subdivisionNumber
 
-collideStaticDynamicShapes ((Plane2d p), t1, _)        ((Ball2d b), t2, it2) =
-                           collidePlaneImplicitShape p b t1 t2 it2
+collideStaticDynamicShapes ((Plane2d p), t1, _)        ((Ball2d b), t2, _) =
+                           collidePlaneImplicitShape p b t1 t2
 
-collideStaticDynamicShapes ((Plane2d p), t1, _)        ((Rectangle2d r), t2, it2) =
-                           collidePlaneImplicitShape p r t1 t2 it2
+collideStaticDynamicShapes ((Plane2d p), t1, _)        ((Rectangle2d r), t2, _) =
+                           collidePlaneImplicitShape p r t1 t2
 
 
 collideDynamicDynamicShapes :: (DynamicShape2d, Transform2d, Transform2d) ->
