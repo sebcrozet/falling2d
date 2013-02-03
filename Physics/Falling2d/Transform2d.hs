@@ -15,7 +15,7 @@ import Physics.Falling2d.Vec1
 type Transform2d = Proj3
 
 instance DeltaTransform Transform2d Vec2 where
-  deltaTransform p v = dt *. v
+  deltaTransform p v = v .* dt
                        where
                        t  = fromProjective p
                        dt = trim t :: Mat2
@@ -32,7 +32,5 @@ instance Translation Transform2d Vec2 where
 instance Rotation Transform2d Vec1 where
   rotate (Vec1 rotation) p = p .*. (linear $ rotMatrix2 rotation)
 
-instance PrincipalDirections Vec2 where
-  principalDirections = [ Vec2 1 0, Vec2 0 1, Vec2 (-1) 0, Vec2 0 (-1) ]
-
-instance Transform Transform2d Vec2 Vec1
+instance Transform       Transform2d Vec2
+instance TransformSystem Transform2d Vec2 Vec1
