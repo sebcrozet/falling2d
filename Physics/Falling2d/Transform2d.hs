@@ -24,7 +24,7 @@ instance DeltaTransform Transform2d Vec2 where
                                 t  = fromProjective p
                                 dt = trim t :: Mat2
 
-instance Translation Transform2d Vec2 where
+instance Translatable Transform2d Vec2 where
   translation p = trim t :: Vec2
                   where
                   (Mat3 _ _ t) = fromProjective p
@@ -33,8 +33,9 @@ instance Translation Transform2d Vec2 where
                            (Mat3 r1 r2 (Vec3 x' y' _)) = fromProjective p
                            newMat = Mat3 r1 r2 (Vec3 (x + x') (y + y') 1.0)
 
-instance Rotation Transform2d Vec1 where
-  rotate (Vec1 rotation) p = p .*. (linear $ rotMatrix2 rotation)
+instance Rotatable Transform2d Vec1 where
+  rotation _           = undefined -- FIXME: extract the rotation from the matrix
+  rotate  (Vec1 rot) p = p .*. (linear $ rotMatrix2 rot)
 
 instance Transform       Transform2d Vec2
 instance TransformSystem Transform2d Vec2 Vec1

@@ -26,6 +26,8 @@ type World2d identifierType broadPhaseType narrowPhaseType contactManifoldType =
                                                                                          InverseInertiaTensor2d
                                                                                          DynamicShape2d
                                                                                          StaticShape2d
+                                                                                         TransformedDynamicShape2d
+                                                                                         TransformedStaticShape2d
                                                                                          broadPhaseType
                                                                                          narrowPhaseType
                                                                                          contactManifoldType

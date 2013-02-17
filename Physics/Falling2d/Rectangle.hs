@@ -18,6 +18,7 @@ data Rectangle = Rectangle Double Double
 instance ImplicitShape Rectangle Vec2 where
   supportPoint (Rectangle rx ry) (Vec2 dx dy) = Vec2 (signum dx * rx) (signum dy * ry)
 
+
 rectangleVolume :: Rectangle -> Double
 rectangleVolume (Rectangle rx ry) = 4.0 * rx * ry
 

@@ -19,6 +19,8 @@ type RigidBody2d = RigidBody Proj3
                              InverseInertiaTensor2d
                              DynamicShape2d
                              StaticShape2d
+                             TransformedDynamicShape2d
+                             TransformedStaticShape2d
 
 type OrderedRigidBody2d identifierType = OrderedRigidBody identifierType
                                                           Proj3
@@ -28,3 +30,5 @@ type OrderedRigidBody2d identifierType = OrderedRigidBody identifierType
                                                           InverseInertiaTensor2d
                                                           DynamicShape2d
                                                           StaticShape2d
+                                                          TransformedDynamicShape2d
+                                                          TransformedStaticShape2d
