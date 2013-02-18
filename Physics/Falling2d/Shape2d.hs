@@ -46,7 +46,7 @@ data TransformedStaticShape2d = TransformedStaticBall2d        (Ball Vec2)
                                 deriving(Show)
 
 instance VolumetricShape DynamicShape2d InertiaTensor2d InverseInertiaTensor2d Vec1 Proj3 where
-  volume                   (Ball2d b)               = ballVolume b 2
+  volume                   (Ball2d b)               = ballVolume b
   volume                   (Rectangle2d r)          = rectangleVolume r
   volume                   (TransformedShape2d s)   = volume s
   volume                   (CompoundShape2d cs)     = sum $ map volume cs
