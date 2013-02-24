@@ -5,6 +5,7 @@
 module Physics.Falling2d.Transform2d
 (
 Transform2d
+, module Physics.Falling.Math.Transform
 )
 where
 
@@ -33,9 +34,9 @@ instance Translatable Transform2d Vec2 where
                   where
                   (Mat3 _ _ t) = fromProjective p
   translate   (Vec2 x y) p = toProjectiveUnsafe newMat
-                           where
-                           (Mat3 r1 r2 (Vec3 x' y' _)) = fromProjective p
-                           newMat = Mat3 r1 r2 (Vec3 (x + x') (y + y') 1.0)
+                             where
+                             (Mat3 r1 r2 (Vec3 x' y' _)) = fromProjective p
+                             newMat = Mat3 r1 r2 (Vec3 (x + x') (y + y') 1.0)
 
 instance Rotatable Transform2d Vec1 where
   rotation _           = undefined -- FIXME: extract the rotation from the matrix
@@ -49,17 +50,17 @@ newtype instance Vector    Vec2 = V_Vec2  (Vector    (Double, Double))
 instance Unbox Vec2
 
 instance M.MVector MVector Vec2 where
-  {-# INLINE basicLength #-}
-  {-# INLINE basicUnsafeSlice #-}
-  {-# INLINE basicOverlaps #-}
-  {-# INLINE basicUnsafeNew #-}
+  {-# INLINE basicLength          #-}
+  {-# INLINE basicUnsafeSlice     #-}
+  {-# INLINE basicOverlaps        #-}
+  {-# INLINE basicUnsafeNew       #-}
   {-# INLINE basicUnsafeReplicate #-}
-  {-# INLINE basicUnsafeRead #-}
-  {-# INLINE basicUnsafeWrite #-}
-  {-# INLINE basicClear #-}
-  {-# INLINE basicSet #-}
-  {-# INLINE basicUnsafeCopy #-}
-  {-# INLINE basicUnsafeGrow #-}
+  {-# INLINE basicUnsafeRead      #-}
+  {-# INLINE basicUnsafeWrite     #-}
+  {-# INLINE basicClear           #-}
+  {-# INLINE basicSet             #-}
+  {-# INLINE basicUnsafeCopy      #-}
+  {-# INLINE basicUnsafeGrow      #-}
   basicLength (MV_Vec2 v)                   = M.basicLength v
   basicUnsafeSlice i n (MV_Vec2 v)          = MV_Vec2 $ M.basicUnsafeSlice i n v
   basicOverlaps (MV_Vec2 v1) (MV_Vec2 v2)   = M.basicOverlaps v1 v2
@@ -74,11 +75,11 @@ instance M.MVector MVector Vec2 where
 
 instance G.Vector Vector Vec2 where
   {-# INLINE basicUnsafeFreeze #-}
-  {-# INLINE basicUnsafeThaw #-}
-  {-# INLINE basicLength #-}
-  {-# INLINE basicUnsafeSlice #-}
+  {-# INLINE basicUnsafeThaw   #-}
+  {-# INLINE basicLength       #-}
+  {-# INLINE basicUnsafeSlice  #-}
   {-# INLINE basicUnsafeIndexM #-}
-  {-# INLINE elemseq #-}
+  {-# INLINE elemseq           #-}
   basicUnsafeFreeze (MV_Vec2 v)           = V_Vec2 `liftM` G.basicUnsafeFreeze v
   basicUnsafeThaw (V_Vec2 v)              = MV_Vec2 `liftM` G.basicUnsafeThaw v
   basicLength (V_Vec2 v)                  = G.basicLength v

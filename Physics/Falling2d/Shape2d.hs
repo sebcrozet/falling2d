@@ -7,6 +7,10 @@ DynamicShape2d(..)
 , StaticShape2d(..)
 , TransformedDynamicShape2d(..)
 , TransformedStaticShape2d(..)
+, module Physics.Falling.Shape.Ball
+, module Physics.Falling.Shape.Plane
+, module Physics.Falling2d.Rectangle
+, module Physics.Falling.Shape.TransformedShape
 )
 where
 
