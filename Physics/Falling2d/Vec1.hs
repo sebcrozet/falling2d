@@ -1,5 +1,7 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
-{-# LANGUAGE TypeFamilies          #-}
+{-# LANGUAGE MultiParamTypeClasses    #-}
+{-# LANGUAGE TypeFamilies             #-}
+{-# OPTIONS_GHC -funbox-strict-fields #-}
+
 
 module Physics.Falling2d.Vec1
 (
@@ -41,17 +43,17 @@ newtype instance Vector    Vec1 = V_Vec1  (Vector    Double)
 instance Unbox Vec1
 
 instance M.MVector MVector Vec1 where
-  {-# INLINE basicLength #-}
-  {-# INLINE basicUnsafeSlice #-}
-  {-# INLINE basicOverlaps #-}
-  {-# INLINE basicUnsafeNew #-}
+  {-# INLINE basicLength          #-}
+  {-# INLINE basicUnsafeSlice     #-}
+  {-# INLINE basicOverlaps        #-}
+  {-# INLINE basicUnsafeNew       #-}
   {-# INLINE basicUnsafeReplicate #-}
-  {-# INLINE basicUnsafeRead #-}
-  {-# INLINE basicUnsafeWrite #-}
-  {-# INLINE basicClear #-}
-  {-# INLINE basicSet #-}
-  {-# INLINE basicUnsafeCopy #-}
-  {-# INLINE basicUnsafeGrow #-}
+  {-# INLINE basicUnsafeRead      #-}
+  {-# INLINE basicUnsafeWrite     #-}
+  {-# INLINE basicClear           #-}
+  {-# INLINE basicSet             #-}
+  {-# INLINE basicUnsafeCopy      #-}
+  {-# INLINE basicUnsafeGrow      #-}
   basicLength (MV_Vec1 v)                   = M.basicLength v
   basicUnsafeSlice i n (MV_Vec1 v)          = MV_Vec1 $ M.basicUnsafeSlice i n v
   basicOverlaps (MV_Vec1 v1) (MV_Vec1 v2)   = M.basicOverlaps v1 v2
@@ -66,11 +68,11 @@ instance M.MVector MVector Vec1 where
 
 instance G.Vector Vector Vec1 where
   {-# INLINE basicUnsafeFreeze #-}
-  {-# INLINE basicUnsafeThaw #-}
-  {-# INLINE basicLength #-}
-  {-# INLINE basicUnsafeSlice #-}
+  {-# INLINE basicUnsafeThaw   #-}
+  {-# INLINE basicLength       #-}
+  {-# INLINE basicUnsafeSlice  #-}
   {-# INLINE basicUnsafeIndexM #-}
-  {-# INLINE elemseq #-}
+  {-# INLINE elemseq           #-}
   basicUnsafeFreeze (MV_Vec1 v)           = V_Vec1 `liftM` G.basicUnsafeFreeze v
   basicUnsafeThaw (V_Vec1 v)              = MV_Vec1 `liftM` G.basicUnsafeThaw v
   basicLength (V_Vec1 v)                  = G.basicLength v

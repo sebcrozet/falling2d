@@ -7,11 +7,13 @@ module Physics.Falling2d.Shape2dNarrowPhase
 (
 Shape2dNarrowPhase
 , shape2dCollisionDispatcher
+, shape2dNarrowPhaseCollisions
 )
 where
 
 import Data.Vect.Double.Instances()
 import Control.Monad
+import Physics.Falling.Math.Error
 import Physics.Falling.Collision.Detection.NarrowPhase
 import Physics.Falling.RigidBody.Positionable
 import Physics.Falling.RigidBody.CollisionVolume
@@ -22,6 +24,7 @@ import Physics.Falling.Collision.Detection.PlaneImplicitShapeCollisionDetector
 import Physics.Falling.Collision.Detection.ImplicitShapeImplicitShapeCollisionDetector
 import Physics.Falling.Collision.Detection.IncrementalContactManifold
 import Physics.Falling.Collision.Collision
+import Physics.Falling.Shape.ShapeWithMargin
 import Physics.Falling2d.UnitSphere2d()
 import Physics.Falling2d.OrthonormalBasis2d()
 import Physics.Falling2d.Transform2d
@@ -32,12 +35,28 @@ import Physics.Falling2d.Collision2d
 data Shape2dNarrowPhase = Shape2dNarrowPhase ContactManifold2d
                           deriving(Show)
 
+-- specialize the GJK
+{-# SPECIALIZE collideImplicitShapeImplicitShape :: TransformedShape Rectangle Transform2d Vec2 ->
+                                                    TransformedShape Rectangle Transform2d Vec2 ->
+                                                    Int                                         ->
+                                                    Maybe (PartialCollisionDescr Vec2 Normal2) #-}
+{-# SPECIALIZE collideImplicitShapeImplicitShape :: Ball Vec2                  ->
+                                                    TransformedShape Rectangle Transform2d Vec2 ->
+                                                    Int                        ->
+                                                    Maybe (PartialCollisionDescr Vec2 Normal2) #-}
+{-# SPECIALIZE collideImplicitShapeImplicitShape :: TransformedShape Rectangle Transform2d Vec2 ->
+                                                    Ball Vec2                                   ->
+                                                    Int                                         ->
+                                                    Maybe (PartialCollisionDescr Vec2 Normal2) #-}
 
 instance Ord idt => NarrowPhase Shape2dNarrowPhase (OrderedRigidBody2d idt) ContactManifold2d where
   update        iorb1 iorb2 (Shape2dNarrowPhase cm) = Shape2dNarrowPhase
                                                       $ collideIndexedOrderedRigidBodies iorb1 iorb2 cm
-  collisions    (Shape2dNarrowPhase cm) = cm
-  numCollisions (Shape2dNarrowPhase cm) = length cm
+  collisions     = shape2dNarrowPhaseCollisions
+  numCollisions  = length . shape2dNarrowPhaseCollisions
+
+shape2dNarrowPhaseCollisions :: Shape2dNarrowPhase -> ContactManifold2d
+shape2dNarrowPhaseCollisions (Shape2dNarrowPhase cm) = cm 
 
 -- rigid body <-> rigid body collision dispatch
 collideIndexedOrderedRigidBodies :: Ord idt =>
@@ -46,7 +65,7 @@ collideIndexedOrderedRigidBodies :: Ord idt =>
                                     ContactManifold2d             ->
                                     ContactManifold2d
 collideIndexedOrderedRigidBodies (id1, orb1) (id2, orb2) =
-                                 collideIndexedRigidBodies id1 id2 (rigidBody orb1) (rigidBody orb2)
+                                   collideIndexedRigidBodies id1 id2 (rigidBody orb1) (rigidBody orb2)
 
 collideIndexedRigidBodies :: Int -> Int -> RigidBody2d -> RigidBody2d -> ContactManifold2d -> ContactManifold2d
 collideIndexedRigidBodies _ id2 (StaticBody  sb) (DynamicBody db) cm = do
@@ -69,7 +88,7 @@ collideIndexedRigidBodies id1 id2 (DynamicBody db1) (DynamicBody db2) cm =
                                                                     , (worldToLocal  db2))
                                                                   (contactManifoldGeometries cm)
                           return $ collisionDescr2BibodyCollision id1 id2 collision
-collideIndexedRigidBodies _ _ (StaticBody  _) (StaticBody _) _ = error "Cannot collide two static bodies."
+collideIndexedRigidBodies _ _ (StaticBody  _) (StaticBody _) _ = [] -- error "Cannot collide two static bodies."
 
 -- shape <-> shape collision dispatch
 collideStaticDynamicShapes :: (TransformedStaticShape2d,  Transform2d, Transform2d) ->
@@ -99,17 +118,17 @@ collideStaticDynamicShapes ((TransformedStaticRectangle2d r1), t1, it1) ((Transf
 collideStaticDynamicShapes ((TransformedPlane2d p), _, it1) ((TransformedBall2d b), _, it2) _ =
                            _maybe2List
                            $ liftM (mkCollisionDescr it1 it2)
-                           $ collidePlaneImplicitShape p b
+                           $ collidePlaneImplicitShape p (ShapeWithMargin b margin)
 
 collideStaticDynamicShapes ((TransformedPlane2d p), t1, it1) ((TransformedRectangle2d r), t2, it2) cm =
                             _updateAdd t1 t2 cm
                            $ liftM (mkCollisionDescr it1 it2)
-                           $ collidePlaneImplicitShape p r
+                           $ collidePlaneImplicitShape p (ShapeWithMargin r margin)
 
 
 collideDynamicDynamicShapes :: (TransformedDynamicShape2d, Transform2d, Transform2d) ->
                                (TransformedDynamicShape2d, Transform2d, Transform2d) ->
-                               [ CollisionDescr2d ]                       ->
+                               [ CollisionDescr2d ]                                  ->
                                [ CollisionDescr2d ]
 collideDynamicDynamicShapes ((TransformedBall2d b1), _, it1)        ((TransformedBall2d b2), _, it2) _ =
                             _maybe2List
@@ -142,6 +161,7 @@ _maybe2List Nothing  = []
 _maybe2List (Just a) = [a]
 
 _updateAdd :: Transform2d -> Transform2d -> [CollisionDescr2d] -> Maybe CollisionDescr2d -> [CollisionDescr2d]
-_updateAdd t1 t2 cm c = case c of
+_updateAdd t1 t2 cm c =
+           case c of
            Nothing   -> updateContacts t1 t2 cm
            Just coll -> addContact coll $ updateContacts t1 t2 cm

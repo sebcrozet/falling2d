@@ -38,6 +38,13 @@ type DefaultWorld2d identifierType = World2d identifierType
                                              Shape2dNarrowPhase
                                              ContactManifold2d
 
+-- We specialize the constraint solver since its inner loop has to be very efficient. Without that
+-- constraint resolution is almost 100 times slower!
+{-# SPECIALIZE solveConstraintsIsland :: (Ord idt) =>
+                                         Double                            ->
+                                         [ (Int, OrderedRigidBody2d idt) ] ->
+                                         [ ContactManifold2d ]             ->
+                                         ([ (Int, OrderedRigidBody2d idt) ], [ ContactManifold2d ]) #-}
 mkWorld2d :: (Ord identifierType) => DefaultWorld2d identifierType
 mkWorld2d = W.mkWorld mkBroadPhase
                       shape2dCollisionDispatcher
